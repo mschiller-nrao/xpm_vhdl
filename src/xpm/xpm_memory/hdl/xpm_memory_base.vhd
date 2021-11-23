@@ -157,6 +157,8 @@ architecture rtl of xpm_memory_base is
     variable tmp_sv : std_logic_vector(mem_width-1 downto 0);
     variable mem: t_meminit_array(0 to mem_size-1, mem_width-1 downto 0) := (others => (others => '0'));
     variable status   : file_open_status;
+    variable read_good : boolean;
+    variable binary_read_good : boolean := true;
   begin
     if f_empty_file_name(file_name) then
       return mem;
@@ -170,7 +172,9 @@ architecture rtl of xpm_memory_base is
       if not endfile(f_in) then
         readline (f_in, l);
         -- read function gives us bit_vector
-        read (l, tmp_bv);
+
+        read (l, tmp_bv, read_good);
+        binary_read_good := binary_read_good and read_good;
       else
         tmp_bv := (others => '0');
       end if;
@@ -179,6 +183,26 @@ architecture rtl of xpm_memory_base is
         mem(i, j) := tmp_sv(j);
       end loop;
     end loop;
+
+    if not binary_read_good then
+      file_close(f_in);
+      file_open(status, f_in, file_name, read_mode);
+
+      for I in 0 to mem_size-1 loop
+        if not endfile(f_in) then
+          readline (f_in, l);
+          -- read function gives us bit_vector
+          hread (l, tmp_bv);
+        else
+          tmp_bv := (others => '0');
+        end if;
+        tmp_sv := to_stdlogicvector(tmp_bv);
+        for J in 0 to mem_width-1 loop
+          mem(i, j) := tmp_sv(j);
+        end loop;
+      end loop;
+      report "f_load_mem_from_file(): file '"&file_name&"' has been re-read as hex" severity note;
+    end if;
 
     if not endfile(f_in) then
       report "f_load_mem_from_file(): file '"&file_name&"' is bigger than available memory" severity FAILURE;
