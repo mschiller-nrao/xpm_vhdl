@@ -473,7 +473,7 @@ architecture rtl of xpm_fifo_axif is
   signal awvalid_en         : std_logic;
   signal awvalid_pkt        : std_logic;
   signal awready_pkt        : std_logic;
-  signal wr_pkt_count       : integer;
+  signal wr_pkt_count       : integer; -- @suppress "The type of a signal has to be constrained in size"
   signal wach_re            : std_logic;
   signal wdch_we            : std_logic;
   signal wdch_re            : std_logic;
@@ -511,8 +511,8 @@ architecture rtl of xpm_fifo_axif is
   signal arvalid_en          : std_logic;
   signal rdch_rd_ok          : std_logic;
   signal accept_next_pkt     : std_logic;
-  signal rdch_free_space     : integer;
-  signal rdch_commited_space : integer;
+  signal rdch_free_space     : integer; -- @suppress "The type of a signal has to be constrained in size"
+  signal rdch_commited_space : integer; -- @suppress "The type of a signal has to be constrained in size"
   signal rach_re             : std_logic;
   signal rdch_we             : std_logic;
   signal rdch_re             : std_logic;
@@ -535,7 +535,7 @@ architecture rtl of xpm_fifo_axif is
   constant RUSER_OFFSET      : integer := RRESP_OFFSET-AXI_RUSER_WIDTH;
 begin
 
-    m_aclk_int <= s_aclk when (P_COMMON_CLOCK = 1) else m_aclk;
+    m_aclk_int <= s_aclk when (P_COMMON_CLOCK = 1) else m_aclk; -- @suppress "Clock signal 's_aclk' not used as clock"
 
     inverted_reset <= not s_aresetn;
 

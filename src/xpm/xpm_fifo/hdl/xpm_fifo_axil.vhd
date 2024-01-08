@@ -337,7 +337,7 @@ function clog2(N : natural) return positive is
     signal awvalid_en         : std_logic;
     signal awvalid_pkt        : std_logic;
     signal awready_pkt        : std_logic;
-    signal wr_pkt_count       : integer;
+    signal wr_pkt_count       : integer; -- @suppress "The type of a signal has to be constrained in size"
     signal wach_re            : std_logic;
     signal wdch_we            : std_logic;
     signal wdch_re            : std_logic; 
@@ -374,8 +374,8 @@ function clog2(N : natural) return positive is
     signal arvalid_en          : std_logic;
     signal rdch_rd_ok          : std_logic;
     signal accept_next_pkt     : std_logic;
-    signal rdch_free_space     : integer;
-    signal rdch_commited_space : integer;
+    signal rdch_free_space     : integer; -- @suppress "The type of a signal has to be constrained in size"
+    signal rdch_commited_space : integer; -- @suppress "The type of a signal has to be constrained in size"
     signal rach_re             : std_logic;
     signal rdch_we             : std_logic;
     signal rdch_re             : std_logic;
